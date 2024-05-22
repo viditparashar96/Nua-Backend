@@ -15,6 +15,7 @@ export const AuthMiddleware = (req: any, res: Response, next: NextFunction) => {
       req.headers["Authorization"] ||
       req.headers["authorization"];
     console.log("Token in middleware=>", token);
+    console.log("Headers=>", req.headers);
     if (!token) return res.status(401).json({ msg: "Unauthorized" });
     const decoded: any = jwt.verify(token, process.env.JWT_SECRET!);
     if (!decoded) return res.status(401).json({ msg: "Unauthorized2" });

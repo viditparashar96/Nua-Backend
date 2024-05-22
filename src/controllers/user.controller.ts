@@ -2,7 +2,7 @@ import console from "console";
 import { Request, Response } from "express";
 import User from "../models/user.model";
 
-export const Register = async (req: Request, res: Response): Promise<void> => {
+export const Register = async (req: Request, res: Response) => {
   try {
     const { name, email, password } = req.body;
     if (!name || !email || !password) {
@@ -25,7 +25,7 @@ export const Register = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export const Login = async (req: Request, res: Response): Promise<void> => {
+export const Login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
@@ -43,9 +43,14 @@ export const Login = async (req: Request, res: Response): Promise<void> => {
 
     const token = await foundUser.getJwtToken();
     console.log(token);
-    res.cookie("token", token, { httpOnly: true });
-
-    res.status(200).json({ msg: "Login Successful" });
+    return res
+      .cookie("token", token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+      })
+      .status(200)
+      .json({ token, msg: "Login Successful" });
   } catch (error) {
     console.log(error);
   }
