@@ -1,0 +1,27 @@
+import console from "console";
+import { NextFunction, Request, Response } from "express";
+import jwt from "jsonwebtoken";
+export interface RequestWithUser extends Request {
+  user: any;
+}
+export const AuthMiddleware = (req: any, res: Response, next: NextFunction) => {
+  try {
+    const token =
+      req.headers.cookie?.split("=")[1] ||
+      req.headers.authorization?.split(" ")[1] ||
+      req.headers["x-access-token"] ||
+      req.headers["token"] ||
+      req.headers["Token"] ||
+      req.headers["Authorization"] ||
+      req.headers["authorization"];
+    console.log("Token in middleware=>", token);
+    if (!token) return res.status(401).json({ msg: "Unauthorized" });
+    const decoded: any = jwt.verify(token, process.env.JWT_SECRET!);
+    if (!decoded) return res.status(401).json({ msg: "Unauthorized2" });
+    req.user = decoded;
+    next();
+  } catch (error) {
+    console.log(error);
+    res.status(401).json({ msg: "Unauthorized3" });
+  }
+};
