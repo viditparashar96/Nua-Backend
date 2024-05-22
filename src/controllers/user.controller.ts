@@ -43,14 +43,7 @@ export const Login = async (req: Request, res: Response) => {
 
     const token = await foundUser.getJwtToken();
     console.log(token);
-    return res
-      .cookie("token", token, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "none",
-      })
-      .status(200)
-      .json({ token, msg: "Login Successful" });
+    return res.json({ token, msg: "Login Successful" });
   } catch (error) {
     console.log(error);
   }
