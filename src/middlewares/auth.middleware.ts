@@ -6,14 +6,7 @@ export interface RequestWithUser extends Request {
 }
 export const AuthMiddleware = (req: any, res: Response, next: NextFunction) => {
   try {
-    const token =
-      req.headers.cookie?.split("=")[1] ||
-      req.headers.authorization?.split(" ")[1] ||
-      req.headers["x-access-token"] ||
-      req.headers["token"] ||
-      req.headers["Token"] ||
-      req.headers["Authorization"] ||
-      req.headers["authorization"];
+    const token = req.headers["Authorization"] || req.headers["authorization"];
     console.log("Token in middleware=>", token);
     console.log("Headers=>", req.headers);
     if (!token) return res.status(401).json({ msg: "Unauthorized" });
