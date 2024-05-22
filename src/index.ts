@@ -12,7 +12,7 @@ const port = process.env.PORT || 3000;
 app.use(logger("dev"));
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://nua-eight.vercel.app/login"],
+    origin: ["http://localhost:5173", "https://nua-eight.vercel.app"],
     credentials: true,
   })
 );
